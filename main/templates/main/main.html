@@ -1,0 +1,17 @@
+
+{% extends 'main/base.html' %}
+
+
+
+{% block content %}
+  {% for d in data %}
+    <article class="media content-section">
+      <div class="media-body">
+          <a class="mr-2">{{ d.packageshipmentid }}</a>
+          <small class="mr-2">{{ d.companyid }}</small>
+          <small class="mr-2">{{ d.attention }}</small>
+          <small class="mr-2">{{ d.address1 }}</small>
+      </div>
+    </article>
+  {% endfor %}
+{% endblock content %}
