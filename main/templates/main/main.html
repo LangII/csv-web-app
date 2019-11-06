@@ -1,19 +1,49 @@
 
-<!-- TEST git commit (2) TEST -->
-
 {% extends 'main/base.html' %}
 
 
 
 {% block content %}
-  {% for d in data %}
-    <article class="media content-section">
-      <div class="media-body">
-          <a class="mr-2">{{ d.packageshipmentid }}</a>
-          <small class="mr-2">{{ d.companyid }}</small>
-          <small class="mr-2">{{ d.attention }}</small>
-          <small class="mr-2">{{ d.address1 }}</small>
-      </div>
-    </article>
-  {% endfor %}
+
+  {# upload csv form #}
+  <article class="media content-section"><div class="media-body">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <label>upload a file</label>
+      <input type="file" name="file"><br><br>
+      <button type="submit">upload</button>
+    </form>
+  </div></article>
+
+  {# display contents of uploaded csv #}
+  <article class="media content-section"><div class="media-body">
+    {% if table %}
+      <h4>table</h4>
+      <table>
+        {% for row in table %}
+          {% if forloop.first %}
+            <tr>{% for i in row %}<th>{{ i }}</th>{% endfor %}</tr>
+          {% else %}
+            <tr>{% for i in row %}<td>{{ i }}</td>{% endfor %}</tr>
+          {% endif %}
+        {% endfor %}
+      </table>
+    {% else %}
+      <h6>no csv file submitted</h6>
+    {% endif %}
+  </div></article>
+
 {% endblock content %}
+
+
+
+{# {% for d in data %} #}
+  {# <article class="media content-section"> #}
+    {# <div class="media-body"> #}
+        {# <a class="mr-2">{{ d.packageshipmentid }}</a> #}
+        {# <small class="mr-2">{{ d.companyid }}</small> #}
+        {# <small class="mr-2">{{ d.attention }}</small> #}
+        {# <small class="mr-2">{{ d.address1 }}</small> #}
+    {# </div> #}
+  {# </article> #}
+{# {% endfor %} #}

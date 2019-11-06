@@ -7,5 +7,6 @@ from . import views
 
 urlpatterns = [
     # path('', views.mainView, name='main-view'),
-    path('', views.MainListView.as_view(), name='main-view'),
+    # path('', views.MainListView.as_view(), name='main-view'),
+    path('', views.csvUploadView, name='main-view'),
 ]
