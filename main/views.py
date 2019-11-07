@@ -33,34 +33,26 @@ class MainListView(ListView):
 
 
 
-# @permission_required('admin.can_add_log_entry')
 def csvUploadView(_request):
+
     template = "main/main.html"
     context = {'debug': {}, 'table': []}
 
-    context['debug']['request method'] = _request.method
-    context['debug']['request files'] = _request.FILES
-
-    # if _request.method == 'GET':  return render(_request, template, context)
+    # context['debug']['request method'] = _request.method
+    # context['debug']['request files'] = _request.FILES
 
     if _request.method == 'POST' and 'file' in _request.FILES:
 
         file_in = _request.FILES['file']
-        # context['debug']['request files contents'] = package
 
-        # package = file_in.read().decode('ascii')
-        # context['debug']['data pack type'] = str(type(package))
-        # context['debug']['data pack'] = package
+        # Check that 'file_in' is '.csv' before proceeding.  Else return error message.
+        context['file_name'] = str(file_in)
+        if not context['file_name'].endswith('.csv'):
+            context['not_csv'] = 'file uploaded is not a csv'
+            return render(_request, template, context)
 
         package = io.StringIO(file_in.read().decode('ascii'))
-
-        table = [ i for i in csv.reader(package, delimiter=',') ]
-        # for col in csv.reader(package, delimiter=','):
-        #     table.append(col)
-        context['debug']['table'] = table
-        context['table'] = table
-
-        # if not container.name.endswith('.csv'):  messages.error(_request, 'this is not a csv file')
+        context['table'] = [ i for i in csv.reader(package, delimiter=',') ]
 
         # data_set = package.read().decode('ascii')
         # io_string = io.StringIO(data_set)

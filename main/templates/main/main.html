@@ -7,29 +7,30 @@
 
   {# upload csv form #}
   <article class="media content-section"><div class="media-body">
+    <h4>UPLOAD . . .</h4>
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      <label>upload a file</label>
-      <input type="file" name="file"><br><br>
+      <label>find file to upload -></label>
+      <input type="file" name="file" accepts=".csv"/><br><br>
       <button type="submit">upload</button>
     </form>
   </div></article>
 
-  {# display contents of uploaded csv #}
+  {# display table from uploaded csv #}
   <article class="media content-section"><div class="media-body">
-    {% if table %}
-      <h4>table</h4>
+    <h4>TABLE . . .</h4>
+    {% if not_csv %}
+      <p>{{ not_csv }}</p>
+    {% elif table %}
       <table>
         {% for row in table %}
-          {% if forloop.first %}
-            <tr>{% for i in row %}<th>{{ i }}</th>{% endfor %}</tr>
-          {% else %}
-            <tr>{% for i in row %}<td>{{ i }}</td>{% endfor %}</tr>
+          {% if forloop.first %}<tr>{% for i in row %}<th>{{ i }}</th>{% endfor %}</tr>
+          {% else %}            <tr>{% for i in row %}<td>{{ i }}</td>{% endfor %}</tr>
           {% endif %}
         {% endfor %}
       </table>
     {% else %}
-      <h6>no csv file submitted</h6>
+      <p>no csv file uploaded</p>
     {% endif %}
   </div></article>
 

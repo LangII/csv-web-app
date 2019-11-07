@@ -26,7 +26,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'main/main.css' %}">
 
     {% if title %}  <title>{{ title }}</title>
-    {%  else %}  <title>default</title>
+    {%  else %}  <title>upload csv</title>
     {% endif %}
 
   </head>
@@ -38,13 +38,13 @@
       {# print out for debugging #}
       {% if debug %}
         <article class="media content-section"><div class="media-body">
-          <h4>DEBUG . . .</h4><br>
+          <h4>DEBUG . . .</h4>
           {% for k, v in debug.items %}<p>{{ k }} = {{ v }}</p>{% endfor %}
         </div></article>
       {% endif %}
 
       {% block content %}{% endblock content %}
-      
+
     </div>
 
     <!--
