@@ -8,10 +8,9 @@
   {# upload csv form #}
   <article class="media content-section"><div class="media-body">
     <h4>UPLOAD . . .</h4>
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
+    <form method="post" enctype="multipart/form-data">{% csrf_token %}
       <label>find file to upload -></label>
-      <input type="file" name="file" accepts=".csv"/><br><br>
+      <input type="file" name="file"><br><br>
       <button type="submit">upload</button>
     </form>
   </div></article>
@@ -22,6 +21,7 @@
     {% if not_csv %}
       <p>{{ not_csv }}</p>
     {% elif table %}
+      <p>data from file '{{ file_name }}'</p>
       <table>
         {% for row in table %}
           {% if forloop.first %}<tr>{% for i in row %}<th>{{ i }}</th>{% endfor %}</tr>
@@ -29,6 +29,11 @@
           {% endif %}
         {% endfor %}
       </table>
+      {# store data from uploaded csv and offer user final 'submit' button #}
+      <form method="post" enctype="multipart/form-data">{% csrf_token %}
+        <input type="text" style="visibility:hidden;" name="submitting" value="{{ table }}">
+        <br><button type="submit">submit</button>
+      </form>
     {% else %}
       <p>no csv file uploaded</p>
     {% endif %}

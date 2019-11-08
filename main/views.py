@@ -1,10 +1,10 @@
 
 import io
 import csv
+import ast
 from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
-
 from django.shortcuts import render
 from django.views.generic import ListView
 from .models import tblPackageShipments
@@ -38,21 +38,35 @@ def csvUploadView(_request):
     template = "main/main.html"
     context = {'debug': {}, 'table': []}
 
-    # context['debug']['request method'] = _request.method
+    # context['debug']['request'] = _request
+    # context['debug']['request type'] = str(type(_request))
+    context['debug']['request method'] = _request.method
     # context['debug']['request files'] = _request.FILES
 
-    if _request.method == 'POST' and 'file' in _request.FILES:
+    if _request.method == 'POST':
 
-        file_in = _request.FILES['file']
+        if 'file' in _request.FILES:
 
-        # Check that 'file_in' is '.csv' before proceeding.  Else return error message.
-        context['file_name'] = str(file_in)
-        if not context['file_name'].endswith('.csv'):
-            context['not_csv'] = 'file uploaded is not a csv'
-            return render(_request, template, context)
+            # Check that 'file' is '.csv' before proceeding.  Else return error message.
+            context['file_name'] = str(_request.FILES['file'])
+            if not context['file_name'].endswith('.csv'):
+                context['not_csv'] = 'file uploaded is not a csv'
+                return render(_request, template, context)
 
-        package = io.StringIO(file_in.read().decode('ascii'))
-        context['table'] = [ i for i in csv.reader(package, delimiter=',') ]
+            package = io.StringIO(_request.FILES['file'].read().decode('ascii'))
+            table = [ i for i in csv.reader(package, delimiter=',') ]
+
+            context['table'] = table
+            context['debug']['table'] = table
+
+        if 'submitting' in _request.POST:
+
+            submitting = ast.literal_eval(_request.POST.get('submitting'))
+
+            ###
+            print("HERE >>>")
+            for each in submitting:  print(each)
+            ###
 
         # data_set = package.read().decode('ascii')
         # io_string = io.StringIO(data_set)
@@ -65,5 +79,7 @@ def csvUploadView(_request):
         #         freightcost=col[2],
         #         fulfillmentcost=col[3]
         #     )
+
+    # context['debug']['context'] = context
 
     return render(_request, template, context)
