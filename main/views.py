@@ -45,40 +45,33 @@ def csvUploadView(_request):
 
     if _request.method == 'POST':
 
-        if 'file' in _request.FILES:
+        if 'csv_upload' in _request.FILES:
 
-            # Check that 'file' is '.csv' before proceeding.  Else return error message.
-            context['file_name'] = str(_request.FILES['file'])
+            # Check that 'csv_upload' is '.csv' before proceeding.  Else return error message.
+            context['file_name'] = str(_request.FILES['csv_upload'])
             if not context['file_name'].endswith('.csv'):
                 context['not_csv'] = 'file uploaded is not a csv'
                 return render(_request, template, context)
 
-            package = io.StringIO(_request.FILES['file'].read().decode('ascii'))
-            table = [ i for i in csv.reader(package, delimiter=',') ]
+            # Use 'io.StringIO' and 'csv.reader' to store contents of 'file' as list-of-lists.
+            package = io.StringIO(_request.FILES['csv_upload'].read().decode('ascii'))
+            context['table'] = [ i for i in csv.reader(package, delimiter=',') ]
 
-            context['table'] = table
-            context['debug']['table'] = table
+            context['debug']['table'] = context['table']
 
         if 'submitting' in _request.POST:
 
+            # Convert string to list-of-lists.
             submitting = ast.literal_eval(_request.POST.get('submitting'))
-
-            ###
-            print("HERE >>>")
-            for each in submitting:  print(each)
-            ###
-
-        # data_set = package.read().decode('ascii')
-        # io_string = io.StringIO(data_set)
-        # next(io_string)
-        # for col in csv.reader(io_string, delimiter=','):
-        #     _, created = tblPackageShipments.objects.update_or_create(
-        #         companyid=col[0],
-        #         requesteddatetime=datetime.now(),
-        #         attention=col[1],
-        #         freightcost=col[2],
-        #         fulfillmentcost=col[3]
-        #     )
+            # Slice 'submitting' to avoid headers.
+            for line in submitting[1:]:
+                _, submission = tblPackageShipments.objects.update_or_create(
+                    companyid=line[0],
+                    requesteddatetime=datetime.now(),
+                    attention=line[1],
+                    freightcost=line[2],
+                    fulfillmentcost=line[3]
+                )
 
     # context['debug']['context'] = context
 

@@ -1,16 +1,14 @@
 
 {% extends 'main/base.html' %}
 
-
-
 {% block content %}
 
   {# upload csv form #}
   <article class="media content-section"><div class="media-body">
     <h4>UPLOAD . . .</h4>
     <form method="post" enctype="multipart/form-data">{% csrf_token %}
-      <label>find file to upload -></label>
-      <input type="file" name="file"><br><br>
+      <label>find file to upload . . .</label>
+      <input type="file" name="csv_upload"><br><br>
       <button type="submit">upload</button>
     </form>
   </div></article>
@@ -30,26 +28,17 @@
         {% endfor %}
       </table>
       {# store data from uploaded csv and offer user final 'submit' button #}
-      <form method="post" enctype="multipart/form-data">{% csrf_token %}
-        <input type="text" style="visibility:hidden;" name="submitting" value="{{ table }}">
-        <br><button type="submit">submit</button>
-      </form>
+      <form method="post" enctype="multipart/form-data"><div id="div_submit">
+        {% csrf_token %}
+        <input type="text" name="submitting" value="{{ table }}">
+        <p>
+          Are you sure these are the orders you want to submit? . . .
+          <button type="submit">yes, please submit</button>
+        </p>
+      </div></form>
     {% else %}
       <p>no csv file uploaded</p>
     {% endif %}
   </div></article>
 
 {% endblock content %}
-
-
-
-{# {% for d in data %} #}
-  {# <article class="media content-section"> #}
-    {# <div class="media-body"> #}
-        {# <a class="mr-2">{{ d.packageshipmentid }}</a> #}
-        {# <small class="mr-2">{{ d.companyid }}</small> #}
-        {# <small class="mr-2">{{ d.attention }}</small> #}
-        {# <small class="mr-2">{{ d.address1 }}</small> #}
-    {# </div> #}
-  {# </article> #}
-{# {% endfor %} #}
