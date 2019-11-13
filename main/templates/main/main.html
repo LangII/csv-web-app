@@ -3,6 +3,19 @@
 
 {% block content %}
 
+  {# offer csv template download #}
+  <article class="media content-section"><div class="media-body">
+    <h4>TEMPLATE . . .</h4>
+    <form method="post" enctype="multipart/form-data"><div id="div_submit">
+      {% csrf_token %}
+      <p>
+        Need our csv template? . . .
+        <button type="submit">click here</button>
+        <input type="text" name="template_download">
+      </p>
+    </div></form>
+  </div></article>
+
   {# upload csv form #}
   <article class="media content-section"><div class="media-body">
     <h4>UPLOAD . . .</h4>
@@ -27,15 +40,17 @@
           {% endif %}
         {% endfor %}
       </table>
+
       {# store data from uploaded csv and offer user final 'submit' button #}
       <form method="post" enctype="multipart/form-data"><div id="div_submit">
         {% csrf_token %}
-        <input type="text" name="submitting" value="{{ table }}">
-        <p>
+        <br><p>
           Are you sure these are the orders you want to submit? . . .
           <button type="submit">yes, please submit</button>
+          <input type="text" name="submitting" value="{{ table }}">
         </p>
       </div></form>
+
     {% else %}
       <p>no csv file uploaded</p>
     {% endif %}

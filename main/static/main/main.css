@@ -62,5 +62,5 @@ td, th {
   padding: 8px;
 }
 
-#div_submit > input { visibility: hidden; }
+#div_submit > P > input { visibility: hidden; }
 #div_submit > p > button { margin-left: 10px; }

@@ -3,10 +3,11 @@ import io
 import csv
 import ast
 from datetime import datetime
+
 from django.contrib import messages
-from django.contrib.auth.decorators import permission_required
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 from django.views.generic import ListView
+
 from .models import tblPackageShipments
 
 
@@ -44,6 +45,22 @@ def csvUploadView(_request):
     # context['debug']['request files'] = _request.FILES
 
     if _request.method == 'POST':
+
+        if 'template_download' in _request.POST:
+
+            cdc_headers = [
+                'CompanyName', 'FirstName', 'LastName', 'Address1', 'Address2', 'City', 'State',
+                'Zip', 'Country', 'Phone', 'Fax', 'Email', 'ShippingMethod', 'ShippingAccount',
+                'ShippingNotes', 'Notes', 'PartNumber1', 'Quantity1', 'PartNumber2', 'Quantity2',
+                'PartNumber3', 'Quantity3', 'PartNumber4', 'Quantity4', 'PartNumber5', 'Quantity5'
+            ]
+
+            response_ = HttpResponse(content_type='text/csv')
+            response_['Content-Disposition'] = 'attachment; filename="cdc_format.csv"'
+            writer = csv.writer(response_, delimiter=',')
+            writer.writerow(cdc_headers)
+
+            return response_
 
         if 'csv_upload' in _request.FILES:
 
